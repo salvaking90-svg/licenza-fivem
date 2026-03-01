@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Licenza e Partita IVA Automatica</title>
+<style>
+body {
+    font-family: Arial; 
+    text-align:center; 
+    background:#111; 
+    color:white; 
+    padding:30px;
+}
+input {
+    padding:8px; 
+    margin:5px; 
+    border-radius:5px; 
+    border:none; 
+    width:80%;
+}
+button {
+    padding:10px 20px; 
+    background:gold; 
+    border:none; 
+    border-radius:5px; 
+    cursor:pointer; 
+    font-weight:bold; 
+    margin-top:10px;
+}
+.licenza {
+    margin-top:20px; 
+    background:white url('logo.png') no-repeat center; 
+    background-size: 150px 150px; 
+    color:black; 
+    padding:20px; 
+    border-radius:10px; 
+    display:none; 
+    white-space: pre-line;
+    position: relative;
+}
+.firma {
+    margin-top:30px;
+    font-size:24px;
+    font-weight:bold;
+    color:gold;
+}
+</style>
+</head>
+<body>
+
+<h1>Generatore Licenza & Partita IVA</h1>
+
+<input type="text" id="nome" placeholder="Nome"><br>
+<input type="text" id="cognome" placeholder="Cognome"><br>
+<input type="text" id="attivita" placeholder="Nome attività"><br>
+<input type="text" id="civico" placeholder="Civico attività"><br>
+<button onclick="generaLicenza()">Genera</button>
+
+<div class="licenza" id="licenzaBox">
+  <p id="testoLicenza"></p>
+  <button id="copiaBtn" onclick="copiaLicenza()">Copia licenza</button>
+</div>
+
+<div class="firma">BY TOTO</div>
+
+<script>
+function generaLicenza() {
+  var nome = document.getElementById("nome").value || "Anonimo";
+  var cognome = document.getElementById("cognome").value || "";
+  var attivita = document.getElementById("attivita").value || "ATT";
+  var civico = document.getElementById("civico").value || "";
+  
+  var codiceAtt = attivita.substring(0,2).toUpperCase();
+  var citta = "LS";
+
+  // Genera numero licenza casuale a 6 cifre
+  var numeroLicenza = Math.floor(100000 + Math.random()*900000);
+  var codiceLicenza = codiceAtt + "-" + citta + "-" + numeroLicenza;
+
+  // Genera partita IVA: LS-(iniziale attività)-7 numeri-058-1 numero
+  var numeri7 = Math.floor(1000000 + Math.random()*9000000); // 7 numeri casuali
+  var numero1 = Math.floor(Math.random()*10); // 1 numero casuale
+  var partitaIVA = citta + "-" + codiceAtt + "-" + numeri7 + "-058-" + numero1;
+
+  // Data di oggi
+  var data = new Date().toLocaleDateString('it-IT');
+
+  // Testo finale
+  var testo = "Si certifica che " + nome + " " + cognome + "\n" +
+              "è autorizzato a esercitare l'attività \"" + attivita + "\"\n" +
+              "Civico: " + civico + "\n\n" +
+              "Numero Licenza: " + codiceLicenza + "\n" +
+              "Partita IVA: " + partitaIVA + "\n" +
+              "Data: " + data + "\n\n" +
+              "Firma Autorità\n________________";
+
+  document.getElementById("testoLicenza").innerText = testo;
+  document.getElementById("licenzaBox").style.display = "block";
+}
+
+function copiaLicenza() {
+  var licenza = document.getElementById("testoLicenza").innerText;
+  navigator.clipboard.writeText(licenza).then(function() {
+    alert("Licenza e Partita IVA copiate negli appunti!");
+  }, function() {
+    alert("Errore nella copia!");
+  });
+}
+</script>
+
+</body>
+</html>
